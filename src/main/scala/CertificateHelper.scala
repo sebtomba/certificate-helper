@@ -9,7 +9,7 @@ import java.util.Base64
 object CertificateHelper {
 
   lazy val Secp256k1: ParameterSpec = {
-    val ap = AlgorithmParameters.getInstance("EC", "SunEC")
+    val ap = AlgorithmParameters.getInstance("EC", "BC")
     ap.init(new ECGenParameterSpec("secp256k1"))
     ParameterSpec(ap.getParameterSpec(classOf[ECParameterSpec]))
   }
@@ -40,13 +40,13 @@ object CertificateHelper {
     fromFile(new File(certFilePath))
 
   def fromFile(certFile: File): X509Certificate = {
-    val cf = CertificateFactory.getInstance("X.509")
+    val cf = CertificateFactory.getInstance("X.509", "BC")
     val is = new FileInputStream(certFile)
     cf.generateCertificate(is).asInstanceOf[X509Certificate]
   }
 
   def generateKeyPair(): KeyPair = {
-    val kpg = KeyPairGenerator.getInstance("EC", "BC")
+    val kpg = KeyPairGenerator.getInstance("ECDSA", "BC")
     kpg.initialize(new ECGenParameterSpec("secp256k1"), new SecureRandom())
     kpg.generateKeyPair
   }
